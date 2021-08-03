@@ -1,7 +1,7 @@
-const { OAuth2 } = require('oauth');
 const querystring = require('querystring');
 const { promisify } = require('es6-promisify');
 const validate = require('validate.js');
+const { OAuthController } = require('./oauth/oauthController.js');
 
 const R = require('./ramda.js');
 const { LOG_LEVELS, getLogger } = require('./logger.js');
@@ -600,7 +600,9 @@ const getEndpointMethodGenerator = (logger, accessTokenPromise, defaultIDs, oaut
  */
 class Splitwise {
   constructor(options = {}) {
-    const { consumerKey, consumerSecret, accessToken } = options;
+    const {
+      consumerKey, consumerSecret, accessToken, oauth2Impl,
+    } = options;
     const defaultIDs = {
       groupID: options.group_id,
       userID: options.user_id,
@@ -615,14 +617,7 @@ class Splitwise {
       throw new Error(message);
     }
 
-    const oauth2 = new OAuth2(
-      consumerKey,
-      consumerSecret,
-      'https://secure.splitwise.com/',
-      null,
-      'oauth/token',
-      null
-    );
+    const oauth2 = new OAuthController(oauth2Impl);
 
     const accessTokenPromise = (() => {
       if (accessToken) {

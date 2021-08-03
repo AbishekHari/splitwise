@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "es6-promisify": "^6.0.0",
-    "oauth": "^0.9.15",
     "querystring": "^0.2.0",
     "ramda": "^0.25.0",
     "validate.js": "^0.12.0"
